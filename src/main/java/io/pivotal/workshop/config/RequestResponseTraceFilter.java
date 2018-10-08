@@ -1,8 +1,6 @@
 package io.pivotal.workshop.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
+import org.slf4j.*;
 import org.springframework.boot.actuate.trace.TraceProperties;
 import org.springframework.boot.actuate.trace.TraceRepository;
 import org.springframework.boot.actuate.trace.WebRequestTraceFilter;
@@ -29,6 +27,7 @@ import java.util.stream.Stream;
 public class RequestResponseTraceFilter extends WebRequestTraceFilter {
     private static final Logger log = LoggerFactory.getLogger(RequestResponseTraceFilter.class);
 
+    public static Marker payload = MarkerFactory.getMarker("PAYLOAD");
 
     private static final List<MediaType> VISIBLE_TYPES = Arrays.asList(
             MediaType.valueOf("application/*"),
@@ -120,7 +119,8 @@ public class RequestResponseTraceFilter extends WebRequestTraceFilter {
             try {
                  String contentString = new String(content, contentEncoding);
                 MDC.put("Payload",contentString.replaceAll("\r\n|\r|\n", ""));
-                log.info("{} {}", "Payload", contentString);
+                log.info(payload, contentString);
+
               //  Stream.of(contentString.split("\r\n|\r|\n")).forEach(line -> log.info("{}", line));
 
             } catch (UnsupportedEncodingException e) {

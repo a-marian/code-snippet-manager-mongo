@@ -2,7 +2,7 @@ package io.pivotal.workshop.controller;
 
 import java.util.List;
 
-import io.pivotal.workshop.config.RequestResponseTraceFilter;
+import io.pivotal.workshop.dto.ResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,12 @@ public class SnippetController {
 	    }
 
 	    @RequestMapping("/snippets/{id}")
-	    public Snippet snippet(@PathVariable("id") String id) {
-	        return snippetRepository.findOne(id);
+	    public ResponseDto snippet(@PathVariable("id") String id) {
+	        ResponseDto response = new ResponseDto();
+	        Snippet snippet = snippetRepository.findOne(id);
+			response.setStatus(HttpStatus.OK);
+	    	return response;
+
 	    }
 
 	    @PostMapping("/snippets")
